@@ -20,7 +20,7 @@ class UsersController extends Controller
 	public function update(UserRequest $userRequest,ImageUploadHandler $imageUploadHandler,User $user){
     	$data = $userRequest->all();
 		if($userRequest->avatar){
-			$result = $imageUploadHandler->save ($userRequest->avatar,'avatars',$user->id);
+			$result = $imageUploadHandler->save ($userRequest->avatar,'avatars',$user->id,400);
 			if($result){
 				$data['avatar'] = $result['path'];
 			}
