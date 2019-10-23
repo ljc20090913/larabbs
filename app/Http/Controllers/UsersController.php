@@ -9,16 +9,22 @@ use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
-    public function show(User $user){
+	public function __construct () {
+		$this->middleware('auth',['except'=>['show']]);
+	}
+
+	public function show(User $user){
 		return view('users.show',compact ('user'));
 	}
 
 	public function edit(User $user){
+		$this->authorize('update', $user);
     	return view('users.edit',compact ('user'));
 	}
 
 	public function update(UserRequest $userRequest,ImageUploadHandler $imageUploadHandler,User $user){
-    	$data = $userRequest->all();
+		$this->authorize('update', $user);
+		$data = $userRequest->all();
 		if($userRequest->avatar){
 			$result = $imageUploadHandler->save ($userRequest->avatar,'avatars',$user->id,400);
 			if($result){
